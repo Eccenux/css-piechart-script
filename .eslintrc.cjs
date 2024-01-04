@@ -7,7 +7,11 @@ module.exports = {
 	"globals": {
 		"$": true,
 		"mw": true,
+		"OO": true,
 	},
+	"exclude": [
+		"dist/",
+	],
 	"extends": "eslint:recommended",
 	"overrides": [{
 		"env": {

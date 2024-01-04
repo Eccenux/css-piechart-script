@@ -4,14 +4,14 @@
  * Enhances tips: [[Module:Piechart]]
  * 
  * History and docs:
- * https://github.com/Eccenux/wikiploy-rollout-example
+ * https://github.com/Eccenux/css-piechart-script
  * 
  * Deployed using: [[Wikipedia:Wikiploy]]
  */
 function PrepChartTitles() {
 	this.charts = [];
 	this.tips = [];
-	this.charts.push('.smooth-pie div[title]');
+	this.charts.push({parent:'.smooth-pie', items:'.smooth-pie div[title]'});
 
 }
 
@@ -21,22 +21,32 @@ PrepChartTitles.prototype.init = function (el) {
 	}
 }
 
-PrepChartTitles.prototype.prepChart = function (selector) {
-	var list = document.querySelectorAll(selector);
+/** Prepare all chart elements. */
+PrepChartTitles.prototype.prepChart = function (chart) {
+	var list = document.querySelectorAll(chart.items);
+	// console.log('prep-l', list);
 	for (var i = 0; i < list.length; i++) {
 		var el = list[i];
 		this.prep(el);
 	}
+	var parents = document.querySelectorAll(chart.parent);
+	for (var i = 0; i < parents.length; i++) {
+		var el = parents[i];
+		this.prep(el, true);
+	}
 }
 
+/** Simplified htmlspecialchars. */
 PrepChartTitles.prototype.encode = function (text) {
 	return text
 		.replace(/&/g, "&amp;")
 		.replace(/</g, "&lt;")
 		.replace(/>/g, "&gt;")
+	;
 }
 
-PrepChartTitles.prototype.prep = function (el) {
+/** Prepare single slice (or bar). */
+PrepChartTitles.prototype.prep = function (el, isParent) {
 	var title = el.getAttribute('title');
 	if (!title.length) {
 		return false;
@@ -47,24 +57,24 @@ PrepChartTitles.prototype.prep = function (el) {
 	// A PopupWidget
 	var popup = new OO.ui.PopupWidget({
 		$content: $('<p>' + title + '</p>'),
-		//$floatableContainer: $(el),
-		$floatableContainer: $(el.parentNode),
+		$floatableContainer: isParent ? $(el) : $(el.parentNode),
 		padded: true,
 		align: 'center',
-		autoFlip: false,
-		//width: 300
+		autoClose: true,
+		width: 100,
 	});
 	// el.parentNode.insertAdjacentElement('afterend', popup.$element[0]);
 	document.body.appendChild(popup.$element[0]);
 	this.tips.push(popup)
 
 	// action
-	el.addEventListener('click', () => {
-		console.log({
-			title,
-			el
-		});
-		this.tips.forEach(function (tip) {
+	var me = this;
+	el.addEventListener('click', function(e) {
+		// console.log('click', e.target, {isParent});
+		if (!isParent) {
+			e.stopPropagation(); // stop bubbling
+		}
+		me.tips.forEach(function (tip) {
 			tip.toggle(false);
 		});
 		popup.toggle(true)

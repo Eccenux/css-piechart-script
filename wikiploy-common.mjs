@@ -13,11 +13,11 @@ export function addConfig(configs, site, isRelease) {
 		site,
 		nowiki: true,
 	}));
-	configs.push(new DeployConfig({
-		src: 'dist/piechartHelper.css',
-		dst: `${deploymentName}.css`,
-		site,
-	}));
+	// configs.push(new DeployConfig({
+	// 	src: 'dist/piechartHelper.css',
+	// 	dst: `${deploymentName}.css`,
+	// 	site,
+	// }));
 }
 export function addConfigRelease(configs, site) {
 	addConfig(configs, site, true);
@@ -28,10 +28,17 @@ export function addConfigRelease(configs, site) {
  * @param {WikiployLite} ployBot 
  */
 export async function setupSummary(ployBot) {
+	/**/
 	const summary = await userPrompt('Summary of changes (empty for default summary):');
 	if (typeof summary === 'string' && summary.length) {
 		ployBot.summary = () => {
 			return summary;
 		};
 	}
+	/**
+	ployBot.summary = () => {
+		return 'include chart area';
+	};
+	/**/
+
 }
