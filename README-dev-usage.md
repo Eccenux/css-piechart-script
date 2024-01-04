@@ -27,7 +27,7 @@ To create your own gadget from this repository:
 2. Copy files from the downloaded wikiploy example to your repo.
 3. Commit initial wikiploy files.
 4. Fix names:
-   - Replace `yourGadgetName` with your actual gadget name.
+   - Replace `piechartHelper` with your actual gadget name.
    - Replace `wikiploy-rollout-example` with the lowercase version of your gadget name.
    - Ensure `addConfig` works on the `site` you will be deploying to.
 5. Commit the changes.

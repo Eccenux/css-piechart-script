@@ -1,5 +1,7 @@
 /**
- * Wikiploy gadget example.
+ * Chart helper.
+ * 
+ * Enhances tips: [[Module:Piechart]]
  * 
  * History and docs:
  * https://github.com/Eccenux/wikiploy-rollout-example
